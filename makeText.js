@@ -20,3 +20,29 @@ function makeText(path) {
     }
   });
 }
+
+async function makeURLText(url) {
+    let resp;
+
+    try {
+        resp = await axios.get(url);
+    } catch(err) {
+        console.error(`Cannot read URL: ${url}: ${err}`);
+        process.exit(1);
+    }
+    generateText(resp.data)
+}
+
+let [method, path] = process.argv.slice(2);
+
+if(method === "file") {
+    makeText(path);
+}
+
+else if (method === "url") {
+    makeURLText(path);
+}
+else {
+    console.error(`Unknown method: ${method}`);
+    process.exit(1)
+}
